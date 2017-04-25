@@ -3,22 +3,23 @@
 
 int main(void)
 {
-	char portname[15] = "";
+	char SerialPort[15] = "";
 
 	for (int i = 0; i < 256; ++i)
 	{
-		sprintf(portname, "\\\\.\\COM%d", i);
-		//puts(portname);
+		sprintf(SerialPort, "\\\\.\\COM%d", i);
+		
 		HANDLE Port = CreateFile(
-                  portname,
+                  SerialPort,
                   GENERIC_READ | GENERIC_WRITE,
                   0,
                   NULL,
                   OPEN_EXISTING,
                   FILE_ATTRIBUTE_NORMAL,
                   NULL);
+
 		if (Port != INVALID_HANDLE_VALUE)
-			puts(portname);
+			puts(SerialPort);
 	}
 	return 0;
 }
