@@ -1,26 +1,24 @@
 // SerialPortEnum - enumerates serial ports from registry
 #include <windows.h>
-#include <stdio.h>
 #include <tchar.h>
-#include <string.h>
 
 #define MAX_KEY_LENGTH 255
 #define MAX_VALUE_NAME 16383
  
 void SerialPortEnum(HKEY hKey) 
 { 
-    TCHAR    achKey[MAX_KEY_LENGTH];         // buffer for subkey name
-    DWORD    cbName;                         // size of name string 
-    TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
-    DWORD    cchClassName = MAX_PATH;        // size of class string 
-    DWORD    cSubKeys=0;                     // number of subkeys 
-    DWORD    cbMaxSubKey;                    // longest subkey size 
-    DWORD    cchMaxClass;                    // longest class string 
-    DWORD    cValues;                        // number of values for key 
-    DWORD    cchMaxValue;                    // longest value name 
-    DWORD    cbMaxValueData;                 // longest value data 
-    DWORD    cbSecurityDescriptor;           // size of security descriptor 
-    FILETIME ftLastWriteTime;                // last write time 
+    TCHAR    achKey[MAX_KEY_LENGTH];            // buffer for subkey name
+    DWORD    cbName;                            // size of name string 
+    TCHAR    achClass[MAX_PATH] = TEXT("");     // buffer for class name 
+    DWORD    cchClassName = MAX_PATH;           // size of class string 
+    DWORD    cSubKeys=0;                        // number of subkeys 
+    DWORD    cbMaxSubKey;                       // longest subkey size 
+    DWORD    cchMaxClass;                       // longest class string 
+    DWORD    cValues;                           // number of values for key 
+    DWORD    cchMaxValue;                       // longest value name 
+    DWORD    cbMaxValueData;                    // longest value data 
+    DWORD    cbSecurityDescriptor;              // size of security descriptor 
+    FILETIME ftLastWriteTime;                   // last write time 
  
     DWORD   i;
     DWORD   retCode;
@@ -47,7 +45,7 @@ void SerialPortEnum(HKEY hKey)
  
     // enumerate the subkeys, until RegEnumKeyEx fails.
     if (cSubKeys) {
-        printf( "\nNumber of subkeys: %lu\n", cSubKeys);
+        _tprintf(TEXT("\nNumber of subkeys: %lu\n"), cSubKeys);
 
         for (i=0; i<cSubKeys; i++) { 
             cbName = MAX_KEY_LENGTH;
@@ -68,7 +66,7 @@ void SerialPortEnum(HKEY hKey)
  
     // enumerate the key values. 
     if (cValues) {
-        printf( "\nNumber of values: %lu\n", cValues);
+        _tprintf(TEXT("\nNumber of values: %lu\n"), cValues);
 
         for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) { 
             cchValue = MAX_VALUE_NAME; 
@@ -89,7 +87,7 @@ void SerialPortEnum(HKEY hKey)
         }
 
         if (retCode != ERROR_SUCCESS )
-            printf("Error code %lu\n", GetLastError());
+            _tprintf(TEXT("Error code %lu\n"), GetLastError());
     }
 }
 
