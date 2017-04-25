@@ -9,7 +9,7 @@
 #define MAX_KEY_LENGTH 255
 #define MAX_VALUE_NAME 16383
  
-void QueryKey(HKEY hKey) 
+void SerialPortEnum(HKEY hKey) 
 { 
     TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
     DWORD    cbName;                   // size of name string 
@@ -68,7 +68,7 @@ void QueryKey(HKEY hKey)
         }
     } 
  
-    // Enumerate the key values. 
+    // enumerate the key values. 
     if (cValues) {
         printf( "\nNumber of values: %lu\n", cValues);
 
@@ -87,8 +87,7 @@ void QueryKey(HKEY hKey)
                 &varData);
  
             if (retCode == ERROR_SUCCESS )
-                if (strstr(achValue, "Serial"))
-                    _tprintf(TEXT("(%lu) %s %s\n"), i+1, achValue, achData);
+                _tprintf(TEXT("(%lu) %s\t%s\n"), i+1, achValue, achData);
         }
 
         if (retCode != ERROR_SUCCESS )
@@ -109,7 +108,7 @@ void __cdecl _tmain(void)
         &hTestKey);
 
    if (retCode == ERROR_SUCCESS)
-      QueryKey(hTestKey);
+      SerialPortEnum(hTestKey);
    
    RegCloseKey(hTestKey);
 }
