@@ -1,6 +1,4 @@
-// QueryKey - enumerates the subkeys of key and its associated values.
-//     hKey - key whose subkeys and values are to be enumerated.
-
+// SerialPortEnum - enumerates serial ports from registry
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
@@ -54,14 +52,14 @@ void SerialPortEnum(HKEY hKey)
         for (i=0; i<cSubKeys; i++) { 
             cbName = MAX_KEY_LENGTH;
             retCode = RegEnumKeyEx(
-                hKey, 
-                i,
-                achKey, 
-                &cbName, 
-                NULL, 
-                NULL, 
-                NULL, 
-                &ftLastWriteTime);
+                hKey,               // key handle
+                i,                  // index of the subkey
+                achKey,             // buffer for name of the subkey
+                &cbName,            // size of the buffer
+                NULL,               // reserved
+                NULL,               // buffer for user-defined class
+                NULL,               // size of the ud class buffer
+                &ftLastWriteTime);  // last write time
 
             if (retCode == ERROR_SUCCESS)
                 _tprintf(TEXT("(%lu) %s\n"), i+1, achKey);
@@ -77,14 +75,14 @@ void SerialPortEnum(HKEY hKey)
             achValue[0] = '\0';
             achData[0] = '\0';
             retCode = RegEnumValue(
-                hKey, 
-                i, 
-                achValue, 
-                &cchValue, 
-                NULL, 
-                NULL,
-                achData,
-                &varData);
+                hKey,               // key handle
+                i,                  // index of the value
+                achValue,           // buffer for name
+                &cchValue,          // size of buffer
+                NULL,               // reserved
+                NULL,               // type of data
+                achData,            // buffer for value
+                &varData);          // size of buffer
  
             if (retCode == ERROR_SUCCESS )
                 _tprintf(TEXT("(%lu) %s\t%s\n"), i+1, achValue, achData);
@@ -101,11 +99,11 @@ void __cdecl _tmain(void)
 
    DWORD   retCode;
    retCode = RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),
-        0,
-        KEY_READ,
-        &hTestKey);
+        HKEY_LOCAL_MACHINE,                         // predefined key
+        TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),    // name of subkey
+        0,                                          // options
+        KEY_READ,                                   // access rights
+        &hTestKey);                                 // handle var
 
    if (retCode == ERROR_SUCCESS)
       SerialPortEnum(hTestKey);
