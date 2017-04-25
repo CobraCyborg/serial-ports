@@ -9,18 +9,18 @@
  
 void SerialPortEnum(HKEY hKey) 
 { 
-    TCHAR    achKey[MAX_KEY_LENGTH];   // buffer for subkey name
-    DWORD    cbName;                   // size of name string 
+    TCHAR    achKey[MAX_KEY_LENGTH];         // buffer for subkey name
+    DWORD    cbName;                         // size of name string 
     TCHAR    achClass[MAX_PATH] = TEXT("");  // buffer for class name 
-    DWORD    cchClassName = MAX_PATH;  // size of class string 
-    DWORD    cSubKeys=0;               // number of subkeys 
-    DWORD    cbMaxSubKey;              // longest subkey size 
-    DWORD    cchMaxClass;              // longest class string 
-    DWORD    cValues;              // number of values for key 
-    DWORD    cchMaxValue;          // longest value name 
-    DWORD    cbMaxValueData;       // longest value data 
-    DWORD    cbSecurityDescriptor; // size of security descriptor 
-    FILETIME ftLastWriteTime;      // last write time 
+    DWORD    cchClassName = MAX_PATH;        // size of class string 
+    DWORD    cSubKeys=0;                     // number of subkeys 
+    DWORD    cbMaxSubKey;                    // longest subkey size 
+    DWORD    cchMaxClass;                    // longest class string 
+    DWORD    cValues;                        // number of values for key 
+    DWORD    cchMaxValue;                    // longest value name 
+    DWORD    cbMaxValueData;                 // longest value data 
+    DWORD    cbSecurityDescriptor;           // size of security descriptor 
+    FILETIME ftLastWriteTime;                // last write time 
  
     DWORD   i;
     DWORD   retCode;
