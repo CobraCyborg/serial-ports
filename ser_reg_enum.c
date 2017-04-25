@@ -1,5 +1,5 @@
-// QueryKey - Enumerates the subkeys of key and its associated values.
-//     hKey - Key whose subkeys and values are to be enumerated.
+// QueryKey - enumerates the subkeys of key and its associated values.
+//     hKey - key whose subkeys and values are to be enumerated.
 
 #include <windows.h>
 #include <stdio.h>
@@ -24,13 +24,15 @@ void QueryKey(HKEY hKey)
     DWORD    cbSecurityDescriptor; // size of security descriptor 
     FILETIME ftLastWriteTime;      // last write time 
  
-    DWORD i, retCode, varData;
+    DWORD   i;
+    DWORD   retCode;
+    DWORD   varData;
 
-    TCHAR  achData[MAX_VALUE_NAME];
-    TCHAR  achValue[MAX_VALUE_NAME]; 
-    DWORD cchValue = MAX_VALUE_NAME; 
+    TCHAR   achData[MAX_VALUE_NAME];
+    TCHAR   achValue[MAX_VALUE_NAME]; 
+    DWORD   cchValue = MAX_VALUE_NAME; 
  
-    // Get the class name and the value count. 
+    // get the class name and the value count. 
     retCode = RegQueryInfoKey(
         hKey,                    // key handle 
         achClass,                // buffer for class name 
@@ -45,37 +47,32 @@ void QueryKey(HKEY hKey)
         &cbSecurityDescriptor,   // security descriptor 
         &ftLastWriteTime);       // last write time 
  
-    // Enumerate the subkeys, until RegEnumKeyEx fails.
-    
-    if (cSubKeys)
-    {
+    // enumerate the subkeys, until RegEnumKeyEx fails.
+    if (cSubKeys) {
         printf( "\nNumber of subkeys: %d\n", cSubKeys);
 
-        for (i=0; i<cSubKeys; i++) 
-        { 
+        for (i=0; i<cSubKeys; i++) { 
             cbName = MAX_KEY_LENGTH;
-            retCode = RegEnumKeyEx(hKey, i,
-                     achKey, 
-                     &cbName, 
-                     NULL, 
-                     NULL, 
-                     NULL, 
-                     &ftLastWriteTime); 
-            if (retCode == ERROR_SUCCESS) 
-            {
+            retCode = RegEnumKeyEx(
+                hKey, 
+                i,
+                achKey, 
+                &cbName, 
+                NULL, 
+                NULL, 
+                NULL, 
+                &ftLastWriteTime
+            ); 
+            if (retCode == ERROR_SUCCESS)
                 _tprintf(TEXT("(%d) %s\n"), i+1, achKey);
-            }
         }
     } 
  
     // Enumerate the key values. 
-
-    if (cValues) 
-    {
+    if (cValues) {
         printf( "\nNumber of values: %d\n", cValues);
 
-        for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) 
-        { 
+        for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) { 
             cchValue = MAX_VALUE_NAME; 
             achValue[0] = '\0';
             achData[0] = '\0';
@@ -87,17 +84,14 @@ void QueryKey(HKEY hKey)
                 NULL, 
                 NULL,
                 achData,
-                &varData);
+                &varData
+            );
  
-            if (retCode == ERROR_SUCCESS ) 
-            { 
+            if (retCode == ERROR_SUCCESS )
                 if (strstr(achValue, "Serial"))
                     _tprintf(TEXT("(%d) %s %s\n"), i+1, achValue, achData);
-            }/*
-            else {
-                printf("%d\n", GetLastError());
-            }*/
         }
+
         if (retCode != ERROR_SUCCESS )
             printf("Error code %d\n", GetLastError());
     }
@@ -107,13 +101,15 @@ void __cdecl _tmain(void)
 {
    HKEY hTestKey;
 
-   if( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
+   DWORD   retCode;
+   retCode = RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE,
         TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),
         0,
         KEY_READ,
-        &hTestKey) == ERROR_SUCCESS
-      )
-   {
+        &hTestKey
+    );
+   if (retCode == ERROR_SUCCESS) {
       QueryKey(hTestKey);
    }
    
