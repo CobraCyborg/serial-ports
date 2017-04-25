@@ -28,7 +28,7 @@ void QueryKey(HKEY hKey)
     DWORD   retCode;
     DWORD   varData;
 
-    TCHAR   achData[MAX_VALUE_NAME];
+    UCHAR   achData[MAX_VALUE_NAME];
     TCHAR   achValue[MAX_VALUE_NAME]; 
     DWORD   cchValue = MAX_VALUE_NAME; 
  
@@ -49,7 +49,7 @@ void QueryKey(HKEY hKey)
  
     // enumerate the subkeys, until RegEnumKeyEx fails.
     if (cSubKeys) {
-        printf( "\nNumber of subkeys: %d\n", cSubKeys);
+        printf( "\nNumber of subkeys: %lu\n", cSubKeys);
 
         for (i=0; i<cSubKeys; i++) { 
             cbName = MAX_KEY_LENGTH;
@@ -61,16 +61,16 @@ void QueryKey(HKEY hKey)
                 NULL, 
                 NULL, 
                 NULL, 
-                &ftLastWriteTime
-            ); 
+                &ftLastWriteTime);
+
             if (retCode == ERROR_SUCCESS)
-                _tprintf(TEXT("(%d) %s\n"), i+1, achKey);
+                _tprintf(TEXT("(%lu) %s\n"), i+1, achKey);
         }
     } 
  
     // Enumerate the key values. 
     if (cValues) {
-        printf( "\nNumber of values: %d\n", cValues);
+        printf( "\nNumber of values: %lu\n", cValues);
 
         for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) { 
             cchValue = MAX_VALUE_NAME; 
@@ -84,16 +84,15 @@ void QueryKey(HKEY hKey)
                 NULL, 
                 NULL,
                 achData,
-                &varData
-            );
+                &varData);
  
             if (retCode == ERROR_SUCCESS )
                 if (strstr(achValue, "Serial"))
-                    _tprintf(TEXT("(%d) %s %s\n"), i+1, achValue, achData);
+                    _tprintf(TEXT("(%lu) %s %s\n"), i+1, achValue, achData);
         }
 
         if (retCode != ERROR_SUCCESS )
-            printf("Error code %d\n", GetLastError());
+            printf("Error code %lu\n", GetLastError());
     }
 }
 
@@ -107,11 +106,10 @@ void __cdecl _tmain(void)
         TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),
         0,
         KEY_READ,
-        &hTestKey
-    );
-   if (retCode == ERROR_SUCCESS) {
+        &hTestKey);
+
+   if (retCode == ERROR_SUCCESS)
       QueryKey(hTestKey);
-   }
    
    RegCloseKey(hTestKey);
 }
